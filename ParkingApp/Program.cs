@@ -4,9 +4,9 @@ using ParkingApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+bool runSeed = args.Any(arg => arg == "--runSeed");
 
-builder.Services.AddControllers(); 
+builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -14,26 +14,22 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<KontekstDanych>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-
-    
 });
 
 var app = builder.Build();
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-    SeedData(app);
+// Conditionally run seed data logic
+
+//SeedData(app);
+
 
 void SeedData(IHost app)
 {
     var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-        
-    using (var scope = scopedFactory.CreateScope())
-    {
-        
-        var service = scope.ServiceProvider.GetService<Seed>();
 
-        service.SeedDataContext();
-        
-    }
+    using var scope = scopedFactory.CreateScope();
+    var service = scope.ServiceProvider.GetService<Seed>();
+
+    service?.SeedDataContext();
 }
 
 

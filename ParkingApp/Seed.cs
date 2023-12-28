@@ -1,24 +1,22 @@
 ﻿
-
 using ParkingApp.Kontekst_Danych;
 using ParkingApp.Models;
-using System.Diagnostics.Metrics;
 
 namespace ParkingApp
 {
     public class Seed
     {
-        private readonly KontekstDanych kontekstDanych;
-        public Seed(KontekstDanych context)
+        private readonly KontekstDanych _dbContext;
+
+        public Seed(KontekstDanych dbContext)
         {
-            this.kontekstDanych = context;
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
+
         public void SeedDataContext()
         {
-            if (!kontekstDanych.Uzytkownicy.Any() || kontekstDanych.Parking.Any())
+            if (!_dbContext.Uzytkownicy.Any() || _dbContext.Parking.Any())
             {
-
-
                 var users = new List<Uzytkownicy>
                 {
                     new Uzytkownicy
@@ -35,8 +33,8 @@ namespace ParkingApp
                             new Postoje
                             {
                                 id_miejsca_parkingowego = 1,
-                                data_rozpoczęcia = DateTime.Now.AddHours(-2),
-                                data_zakończenia = DateTime.Now.AddHours(-1)
+                                data_rozpoczecia = DateTime.Now.AddHours(-2),
+                                data_zakonczenia = DateTime.Now.AddHours(-1)
                             }
                         },
                         Pojazd = new List<Pojazdy>
@@ -47,6 +45,13 @@ namespace ParkingApp
                                 marka = "Toyota",
                                 model = "Corolla",
                                 waga = 1500
+                            },
+                             new Pojazdy
+                            {
+                                numer_rejestracyjny = "TE23ST",
+                                marka = "KIA",
+                                model = "Stonic",
+                                waga = 1800
                             }
                         },
                         Rezerwacja = new List<Rezerwacje>
@@ -63,8 +68,8 @@ namespace ParkingApp
                     }
                 };
 
-                kontekstDanych.Uzytkownicy.AddRange(users);
-                kontekstDanych.SaveChanges();
+                _dbContext.Uzytkownicy.AddRange(users);
+                _dbContext.SaveChanges();
 
                 var parking = new List<Parkingi>
                 {
@@ -87,8 +92,8 @@ namespace ParkingApp
                     }
                 };
 
-                kontekstDanych.Parking.AddRange(parking);
-                kontekstDanych.SaveChanges();
+                _dbContext.Parking.AddRange(parking);
+                _dbContext.SaveChanges();
             }
         }
     }

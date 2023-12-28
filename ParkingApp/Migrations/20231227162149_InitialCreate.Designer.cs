@@ -12,7 +12,7 @@ using ParkingApp.Kontekst_Danych;
 namespace ParkingApp.Migrations
 {
     [DbContext(typeof(KontekstDanych))]
-    [Migration("20231207154811_InitialCreate")]
+    [Migration("20231227162149_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,7 +33,7 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_miejsca"));
 
-                    b.Property<int>("Parkingid_parkingu")
+                    b.Property<int?>("Parkingiid_parkingu")
                         .HasColumnType("int");
 
                     b.Property<int>("id_parkingu")
@@ -45,7 +45,7 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_miejsca");
 
-                    b.HasIndex("Parkingid_parkingu");
+                    b.HasIndex("Parkingiid_parkingu");
 
                     b.ToTable("MiejsceParkingowe");
                 });
@@ -81,7 +81,7 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_pojazdu"));
 
-                    b.Property<int>("Uzytkownikid_użytkownika")
+                    b.Property<int?>("Uzytkownicyid_uzytkownika")
                         .HasColumnType("int");
 
                     b.Property<int>("id_użytkownika")
@@ -104,7 +104,7 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_pojazdu");
 
-                    b.HasIndex("Uzytkownikid_użytkownika");
+                    b.HasIndex("Uzytkownicyid_uzytkownika");
 
                     b.ToTable("Pojazd");
                 });
@@ -117,24 +117,24 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_postoju"));
 
-                    b.Property<int>("Uzytkownikid_użytkownika")
+                    b.Property<int?>("Uzytkownicyid_uzytkownika")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("data_rozpoczęcia")
+                    b.Property<DateTime>("data_rozpoczecia")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("data_zakończenia")
+                    b.Property<DateTime>("data_zakonczenia")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("id_miejsca_parkingowego")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_użytkownika")
+                    b.Property<int>("id_uzytkownika")
                         .HasColumnType("int");
 
                     b.HasKey("id_postoju");
 
-                    b.HasIndex("Uzytkownikid_użytkownika");
+                    b.HasIndex("Uzytkownicyid_uzytkownika");
 
                     b.ToTable("Postoj");
                 });
@@ -147,10 +147,10 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_rezerwacji"));
 
-                    b.Property<int>("MiejsceParkingoweid_miejsca")
+                    b.Property<int?>("MiejscaParkingoweid_miejsca")
                         .HasColumnType("int");
 
-                    b.Property<int>("Uzytkownikid_użytkownika")
+                    b.Property<int?>("Uzytkownicyid_uzytkownika")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("data_rozpoczęcia")
@@ -165,7 +165,7 @@ namespace ParkingApp.Migrations
                     b.Property<int>("id_pojazdu")
                         .HasColumnType("int");
 
-                    b.Property<int>("id_użytkownika")
+                    b.Property<int>("id_uzytkownika")
                         .HasColumnType("int");
 
                     b.Property<string>("status")
@@ -174,20 +174,20 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_rezerwacji");
 
-                    b.HasIndex("MiejsceParkingoweid_miejsca");
+                    b.HasIndex("MiejscaParkingoweid_miejsca");
 
-                    b.HasIndex("Uzytkownikid_użytkownika");
+                    b.HasIndex("Uzytkownicyid_uzytkownika");
 
                     b.ToTable("Rezerwacja");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Uzytkownicy", b =>
                 {
-                    b.Property<int>("id_użytkownika")
+                    b.Property<int>("id_uzytkownika")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_użytkownika"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_uzytkownika"));
 
                     b.Property<string>("adres")
                         .IsRequired()
@@ -216,61 +216,41 @@ namespace ParkingApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("id_użytkownika");
+                    b.HasKey("id_uzytkownika");
 
                     b.ToTable("Uzytkownicy");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.MiejscaParkingowe", b =>
                 {
-                    b.HasOne("ParkingApp.Models.Parkingi", "Parking")
+                    b.HasOne("ParkingApp.Models.Parkingi", null)
                         .WithMany("MiejsceParkingowe")
-                        .HasForeignKey("Parkingid_parkingu")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Parking");
+                        .HasForeignKey("Parkingiid_parkingu");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Pojazdy", b =>
                 {
-                    b.HasOne("ParkingApp.Models.Uzytkownicy", "Uzytkownik")
+                    b.HasOne("ParkingApp.Models.Uzytkownicy", null)
                         .WithMany("Pojazd")
-                        .HasForeignKey("Uzytkownikid_użytkownika")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Uzytkownik");
+                        .HasForeignKey("Uzytkownicyid_uzytkownika");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Postoje", b =>
                 {
-                    b.HasOne("ParkingApp.Models.Uzytkownicy", "Uzytkownik")
+                    b.HasOne("ParkingApp.Models.Uzytkownicy", null)
                         .WithMany("Postoj")
-                        .HasForeignKey("Uzytkownikid_użytkownika")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Uzytkownik");
+                        .HasForeignKey("Uzytkownicyid_uzytkownika");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Rezerwacje", b =>
                 {
-                    b.HasOne("ParkingApp.Models.MiejscaParkingowe", "MiejsceParkingowe")
+                    b.HasOne("ParkingApp.Models.MiejscaParkingowe", null)
                         .WithMany("Rezerwacja")
-                        .HasForeignKey("MiejsceParkingoweid_miejsca")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MiejscaParkingoweid_miejsca");
 
-                    b.HasOne("ParkingApp.Models.Uzytkownicy", "Uzytkownik")
+                    b.HasOne("ParkingApp.Models.Uzytkownicy", null)
                         .WithMany("Rezerwacja")
-                        .HasForeignKey("Uzytkownikid_użytkownika")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("MiejsceParkingowe");
-
-                    b.Navigation("Uzytkownik");
+                        .HasForeignKey("Uzytkownicyid_uzytkownika");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.MiejscaParkingowe", b =>
