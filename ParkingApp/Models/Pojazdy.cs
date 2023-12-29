@@ -9,8 +9,8 @@ namespace ParkingApp.Models
         public string marka { get; set; } = "";
         public string model { get; set; } = "";
         public int waga { get; set; }
-        public int id_użytkownika { get; set; }
+        public int id_uzytkownika { get; set; }
 
-        [NotMapped] public Uzytkownicy Uzytkownik { get; set; } = new();
+         public Uzytkownicy Uzytkownik { get; set; } = new();
     }
 }

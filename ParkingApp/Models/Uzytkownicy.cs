@@ -2,6 +2,7 @@
 {
     public class Uzytkownicy
     {
+        /*
         public Uzytkownicy()
         {
 
@@ -15,7 +16,7 @@
             Postoj = new List<Postoje>();
             Pojazd = new List<Pojazdy>();
             Rezerwacja = new List<Rezerwacje>();
-        }
+        }*/
 
         public int id_uzytkownika { get; set; }
         public string imie { get; set; }

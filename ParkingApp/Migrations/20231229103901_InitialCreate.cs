@@ -52,17 +52,17 @@ namespace ParkingApp.Migrations
                     id_miejsca = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     id_parkingu = table.Column<int>(type: "int", nullable: false),
-                    stan = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Parkingiid_parkingu = table.Column<int>(type: "int", nullable: true)
+                    stan = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MiejsceParkingowe", x => x.id_miejsca);
                     table.ForeignKey(
-                        name: "FK_MiejsceParkingowe_Parking_Parkingiid_parkingu",
-                        column: x => x.Parkingiid_parkingu,
+                        name: "FK_MiejsceParkingowe_Parking_id_parkingu",
+                        column: x => x.id_parkingu,
                         principalTable: "Parking",
-                        principalColumn: "id_parkingu");
+                        principalColumn: "id_parkingu",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,17 +75,17 @@ namespace ParkingApp.Migrations
                     marka = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     waga = table.Column<int>(type: "int", nullable: false),
-                    id_użytkownika = table.Column<int>(type: "int", nullable: false),
-                    Uzytkownicyid_uzytkownika = table.Column<int>(type: "int", nullable: true)
+                    id_uzytkownika = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pojazd", x => x.id_pojazdu);
                     table.ForeignKey(
-                        name: "FK_Pojazd_Uzytkownicy_Uzytkownicyid_uzytkownika",
-                        column: x => x.Uzytkownicyid_uzytkownika,
+                        name: "FK_Pojazd_Uzytkownicy_id_uzytkownika",
+                        column: x => x.id_uzytkownika,
                         principalTable: "Uzytkownicy",
-                        principalColumn: "id_uzytkownika");
+                        principalColumn: "id_uzytkownika",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,20 +94,20 @@ namespace ParkingApp.Migrations
                 {
                     id_postoju = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    id_miejsca_parkingowego = table.Column<int>(type: "int", nullable: false),
+                    id_miejsca = table.Column<int>(type: "int", nullable: false),
                     data_zakonczenia = table.Column<DateTime>(type: "datetime2", nullable: false),
                     data_rozpoczecia = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    id_uzytkownika = table.Column<int>(type: "int", nullable: false),
-                    Uzytkownicyid_uzytkownika = table.Column<int>(type: "int", nullable: true)
+                    id_uzytkownika = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Postoj", x => x.id_postoju);
                     table.ForeignKey(
-                        name: "FK_Postoj_Uzytkownicy_Uzytkownicyid_uzytkownika",
-                        column: x => x.Uzytkownicyid_uzytkownika,
+                        name: "FK_Postoj_Uzytkownicy_id_uzytkownika",
+                        column: x => x.id_uzytkownika,
                         principalTable: "Uzytkownicy",
-                        principalColumn: "id_uzytkownika");
+                        principalColumn: "id_uzytkownika",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,48 +122,49 @@ namespace ParkingApp.Migrations
                     data_zakończenia = table.Column<DateTime>(type: "datetime2", nullable: false),
                     status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     id_uzytkownika = table.Column<int>(type: "int", nullable: false),
-                    MiejscaParkingoweid_miejsca = table.Column<int>(type: "int", nullable: true),
-                    Uzytkownicyid_uzytkownika = table.Column<int>(type: "int", nullable: true)
+                    MiejsceParkingoweid_miejsca = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Rezerwacja", x => x.id_rezerwacji);
                     table.ForeignKey(
-                        name: "FK_Rezerwacja_MiejsceParkingowe_MiejscaParkingoweid_miejsca",
-                        column: x => x.MiejscaParkingoweid_miejsca,
+                        name: "FK_Rezerwacja_MiejsceParkingowe_MiejsceParkingoweid_miejsca",
+                        column: x => x.MiejsceParkingoweid_miejsca,
                         principalTable: "MiejsceParkingowe",
-                        principalColumn: "id_miejsca");
+                        principalColumn: "id_miejsca",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Rezerwacja_Uzytkownicy_Uzytkownicyid_uzytkownika",
-                        column: x => x.Uzytkownicyid_uzytkownika,
+                        name: "FK_Rezerwacja_Uzytkownicy_id_uzytkownika",
+                        column: x => x.id_uzytkownika,
                         principalTable: "Uzytkownicy",
-                        principalColumn: "id_uzytkownika");
+                        principalColumn: "id_uzytkownika",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MiejsceParkingowe_Parkingiid_parkingu",
+                name: "IX_MiejsceParkingowe_id_parkingu",
                 table: "MiejsceParkingowe",
-                column: "Parkingiid_parkingu");
+                column: "id_parkingu");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pojazd_Uzytkownicyid_uzytkownika",
+                name: "IX_Pojazd_id_uzytkownika",
                 table: "Pojazd",
-                column: "Uzytkownicyid_uzytkownika");
+                column: "id_uzytkownika");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Postoj_Uzytkownicyid_uzytkownika",
+                name: "IX_Postoj_id_uzytkownika",
                 table: "Postoj",
-                column: "Uzytkownicyid_uzytkownika");
+                column: "id_uzytkownika");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rezerwacja_MiejscaParkingoweid_miejsca",
+                name: "IX_Rezerwacja_id_uzytkownika",
                 table: "Rezerwacja",
-                column: "MiejscaParkingoweid_miejsca");
+                column: "id_uzytkownika");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rezerwacja_Uzytkownicyid_uzytkownika",
+                name: "IX_Rezerwacja_MiejsceParkingoweid_miejsca",
                 table: "Rezerwacja",
-                column: "Uzytkownicyid_uzytkownika");
+                column: "MiejsceParkingoweid_miejsca");
         }
 
         /// <inheritdoc />
