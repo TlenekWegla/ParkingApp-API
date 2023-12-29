@@ -30,9 +30,6 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_miejsca"));
 
-                    b.Property<int?>("Parkingiid_parkingu")
-                        .HasColumnType("int");
-
                     b.Property<int>("id_parkingu")
                         .HasColumnType("int");
 
@@ -42,7 +39,7 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_miejsca");
 
-                    b.HasIndex("Parkingiid_parkingu");
+                    b.HasIndex("id_parkingu");
 
                     b.ToTable("MiejsceParkingowe");
                 });
@@ -78,10 +75,7 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_pojazdu"));
 
-                    b.Property<int?>("Uzytkownicyid_uzytkownika")
-                        .HasColumnType("int");
-
-                    b.Property<int>("id_użytkownika")
+                    b.Property<int>("id_uzytkownika")
                         .HasColumnType("int");
 
                     b.Property<string>("marka")
@@ -101,7 +95,7 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_pojazdu");
 
-                    b.HasIndex("Uzytkownicyid_uzytkownika");
+                    b.HasIndex("id_uzytkownika");
 
                     b.ToTable("Pojazd");
                 });
@@ -114,16 +108,13 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_postoju"));
 
-                    b.Property<int?>("Uzytkownicyid_uzytkownika")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("data_rozpoczecia")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("data_zakonczenia")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("id_miejsca_parkingowego")
+                    b.Property<int>("id_miejsca")
                         .HasColumnType("int");
 
                     b.Property<int>("id_uzytkownika")
@@ -131,7 +122,7 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_postoju");
 
-                    b.HasIndex("Uzytkownicyid_uzytkownika");
+                    b.HasIndex("id_uzytkownika");
 
                     b.ToTable("Postoj");
                 });
@@ -144,10 +135,7 @@ namespace ParkingApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_rezerwacji"));
 
-                    b.Property<int?>("MiejscaParkingoweid_miejsca")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Uzytkownicyid_uzytkownika")
+                    b.Property<int>("MiejsceParkingoweid_miejsca")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("data_rozpoczęcia")
@@ -171,9 +159,9 @@ namespace ParkingApp.Migrations
 
                     b.HasKey("id_rezerwacji");
 
-                    b.HasIndex("MiejscaParkingoweid_miejsca");
+                    b.HasIndex("MiejsceParkingoweid_miejsca");
 
-                    b.HasIndex("Uzytkownicyid_uzytkownika");
+                    b.HasIndex("id_uzytkownika");
 
                     b.ToTable("Rezerwacja");
                 });
@@ -220,34 +208,54 @@ namespace ParkingApp.Migrations
 
             modelBuilder.Entity("ParkingApp.Models.MiejscaParkingowe", b =>
                 {
-                    b.HasOne("ParkingApp.Models.Parkingi", null)
+                    b.HasOne("ParkingApp.Models.Parkingi", "Parking")
                         .WithMany("MiejsceParkingowe")
-                        .HasForeignKey("Parkingiid_parkingu");
+                        .HasForeignKey("id_parkingu")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Parking");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Pojazdy", b =>
                 {
-                    b.HasOne("ParkingApp.Models.Uzytkownicy", null)
+                    b.HasOne("ParkingApp.Models.Uzytkownicy", "Uzytkownik")
                         .WithMany("Pojazd")
-                        .HasForeignKey("Uzytkownicyid_uzytkownika");
+                        .HasForeignKey("id_uzytkownika")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Uzytkownik");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Postoje", b =>
                 {
-                    b.HasOne("ParkingApp.Models.Uzytkownicy", null)
+                    b.HasOne("ParkingApp.Models.Uzytkownicy", "Uzytkownik")
                         .WithMany("Postoj")
-                        .HasForeignKey("Uzytkownicyid_uzytkownika");
+                        .HasForeignKey("id_uzytkownika")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Uzytkownik");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.Rezerwacje", b =>
                 {
-                    b.HasOne("ParkingApp.Models.MiejscaParkingowe", null)
+                    b.HasOne("ParkingApp.Models.MiejscaParkingowe", "MiejsceParkingowe")
                         .WithMany("Rezerwacja")
-                        .HasForeignKey("MiejscaParkingoweid_miejsca");
+                        .HasForeignKey("MiejsceParkingoweid_miejsca")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("ParkingApp.Models.Uzytkownicy", null)
+                    b.HasOne("ParkingApp.Models.Uzytkownicy", "Uzytkownik")
                         .WithMany("Rezerwacja")
-                        .HasForeignKey("Uzytkownicyid_uzytkownika");
+                        .HasForeignKey("id_uzytkownika")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MiejsceParkingowe");
+
+                    b.Navigation("Uzytkownik");
                 });
 
             modelBuilder.Entity("ParkingApp.Models.MiejscaParkingowe", b =>

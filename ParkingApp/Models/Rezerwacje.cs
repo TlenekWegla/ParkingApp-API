@@ -12,8 +12,8 @@ namespace ParkingApp.Models
         public string status { get; set; } = "";
         public int id_uzytkownika { get; set; }
 
-        [NotMapped] public Uzytkownicy Uzytkownik { get; set; } = new();
-        [NotMapped] public MiejscaParkingowe MiejsceParkingowe { get; set; } = new();
+         public Uzytkownicy Uzytkownik { get; set; } = new();
+         public MiejscaParkingowe MiejsceParkingowe { get; set; } = new();
 
     }
 }

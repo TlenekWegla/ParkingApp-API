@@ -32,7 +32,7 @@ namespace ParkingApp
                         {
                             new Postoje
                             {
-                                id_miejsca_parkingowego = 1,
+                                id_miejsca = 1,
                                 data_rozpoczecia = DateTime.Now.AddHours(-2),
                                 data_zakonczenia = DateTime.Now.AddHours(-1)
                             }

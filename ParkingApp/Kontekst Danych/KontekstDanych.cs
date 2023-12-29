@@ -42,7 +42,43 @@ public class KontekstDanych : DbContext
         modelBuilder.Entity<Uzytkownicy>()
             .HasKey(u => u.id_uzytkownika);
 
-        // Dodatkowe konfiguracje modelu, jeśli są potrzebne
+    
+
+
+
+        // Klucz obcy dla Postoje
+
+        modelBuilder.Entity<Postoje>()
+           .HasOne(m => m.Uzytkownik)
+           .WithMany(p => p.Postoj)
+           .HasForeignKey(m => m.id_uzytkownika)
+           .OnDelete(DeleteBehavior.Restrict);
+
+        // Klucz obcy dla Pojazd
+
+        modelBuilder.Entity<Pojazdy>()
+          .HasOne(m => m.Uzytkownik)
+          .WithMany(p => p.Pojazd)
+          .HasForeignKey(m => m.id_uzytkownika)
+          .OnDelete(DeleteBehavior.Restrict);
+
+        // Klucz obcy dla rezerwacje
+
+        modelBuilder.Entity<Rezerwacje>()
+            .HasOne(m => m.Uzytkownik)
+            .WithMany(p => p.Rezerwacja)
+            .HasForeignKey(m => m.id_uzytkownika)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Klucz obcy dla MiejscaParkingowe
+
+
+        modelBuilder.Entity<MiejscaParkingowe>()
+            .HasOne(m => m.Parking)
+            .WithMany(p => p.MiejsceParkingowe)
+            .HasForeignKey(m => m.id_parkingu)
+            .OnDelete(DeleteBehavior.Restrict);
+
 
         // Na koniec wywołujemy metodę bazową
         base.OnModelCreating(modelBuilder);

@@ -9,6 +9,6 @@ namespace ParkingApp.Models
         public string stan { get; set; } = "";
         public ICollection<Rezerwacje> Rezerwacja { get; set; } = new List<Rezerwacje>();
 
-        [NotMapped] public Parkingi Parking { get; set; } = new();
+        public Parkingi Parking { get; set; } = new();
     }
 }
